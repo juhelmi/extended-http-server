@@ -28,3 +28,5 @@ Quick usage: This will download the file and launch the server on port 8000 and 
 wget https://raw.githubusercontent.com/w0lfram1te/extended-http-server/main/ehttpserver.py
 python3 ehttpserver.py
 ```
+
+Example call from command line: "$ curl 'http://localhost:8000/READMe.md'"
