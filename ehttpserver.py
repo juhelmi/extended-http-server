@@ -29,8 +29,11 @@ class ExtendedHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers
 
     def do_POST(self):
+        path = self.translate_path(self.path)
+        print(f'POST path {path}')
         length = int(self.headers['Content-Length'])
         body = self.rfile.read(length)
+        print(f'Body json: {body}')
         # https://copyprogramming.com/tutorial/python-http-server-response
         try:
             # result = json.loads(body, encoding='utf-8')
@@ -44,6 +47,7 @@ class ExtendedHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             response.write(bytes(s_len, 'utf-8'))
             self.wfile.write(response.getvalue())
         except Exception as err:
+            print(f'Error {err}')
             tb = traceback.format_exc()
             print(tb)
             self.send_response(500)  # 500 Internal Server Error
