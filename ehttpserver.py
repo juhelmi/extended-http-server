@@ -31,39 +31,26 @@ class ExtendedHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         length = int(self.headers['Content-Length'])
         body = self.rfile.read(length)
-        if False:
-            print(f'Plain data: {body}')
-            post_data = urllib.parse.parse_qs(body.decode('utf-8'))
-            # post_data = urllib.parse.parse_qs(self.rfile.read(length).decode('utf-8'))
-            # You now have a dictionary of the post data
-            print(f'Polku on {self.path}')
-            f = open('tuleva.txt', "w")
-            s = str(post_data)
-            f.write(s)
-            f.close()
-
-            # self.wfile.write("Lorem Ipsum".encode("utf-8"))
-            self.wfile.write("OK".encode("utf-8"))
-        elif True:
-            # https://copyprogramming.com/tutorial/python-http-server-response
-            try:
-                # result = json.loads(body, encoding='utf-8')
-                result = json.loads(body)
-                # Do other stuff with result
-                self.send_response(200)
-                self.end_headers()
-                response = io.BytesIO()
-                response.write(b'POST Received: ')
-                response.write(body)
-                self.wfile.write(response.getvalue())
-            except Exception as err:
-                tb = traceback.format_exc()
-                print(tb)
-                self.send_response(500)  # 500 Internal Server Error
-                self.end_headers()
-                response = io.BytesIO()
-                response.write(b'ERROR: Blah')
-                self.wfile.write(response.getvalue())
+        # https://copyprogramming.com/tutorial/python-http-server-response
+        try:
+            # result = json.loads(body, encoding='utf-8')
+            result = json.loads(body)
+            # Do other stuff with result
+            self.send_response(200)
+            self.end_headers()
+            response = io.BytesIO()
+            response.write(b'POST Received length: ')
+            s_len = str(len(body))
+            response.write(bytes(s_len, 'utf-8'))
+            self.wfile.write(response.getvalue())
+        except Exception as err:
+            tb = traceback.format_exc()
+            print(tb)
+            self.send_response(500)  # 500 Internal Server Error
+            self.end_headers()
+            response = io.BytesIO()
+            response.write(b'ERROR: Blah, reason not identified')
+            self.wfile.write(response.getvalue())
 
 
 if __name__ == '__main__':
