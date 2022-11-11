@@ -42,10 +42,17 @@ class ExtendedHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
             response = io.BytesIO()
-            response.write(b'POST Received length: ')
-            s_len = str(len(body))
-            response.write(bytes(s_len, 'utf-8'))
+            # response.write(b'POST Received length: ')
+            # s_len = str(len(body))
+            # response.write(bytes(s_len, 'utf-8'))
+            response.write(b'POST')
+            # response.write(b'POST Received: ')
+            # response.write(body)
             self.wfile.write(response.getvalue())
+            print(f'Result json was: {result}')
+            for key in result:
+                if len(result[key]) > 0:
+                    print(f'{key}={result[key]}')
         except Exception as err:
             print(f'Error {err}')
             tb = traceback.format_exc()

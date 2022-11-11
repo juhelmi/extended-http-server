@@ -13,17 +13,66 @@
                     // $.post(action, formData, function(data){            
                     //     $("#output").html(data);
                     // });
-                    console.log("Submit näppäin");
-                    // https://reqbin.com/code/javascript/wzp2hxwh/javascript-post-request-example
-                    $.ajax({
-                        type: "POST",
-                        url: "http://localhost:8088/post",
-                        data: `{"Id": 78912, "Customer": "Jason Sweet"}`,
-                        success: function (result) {
-                            console.log(result);
-                        },
-                        dataType: "json"
-                    });
+                    // console.log("Submit näppäin");
+                    var fieldNames = ["field1", "field2", "field3"];
+                    var dict_labels = {
+                        field1: "First name",
+                        field2: "Last name",
+                        field3: "Address 1",
+                        field4: "Address 2",
+                        field5: "ZIP code",
+                        field6: "Phone"
+                    };
+                    var dict_values = {};
+                    for (var key in dict_labels) {
+                        var x = document.getElementById(key).value;
+                        dict_values[key] = x;
+                    }
+                    out_data = JSON.stringify(dict_values);
+                    console.log("Data to be sent: %s", out_data);
+                    if (false) {
+                        // https://reqbin.com/code/javascript/wzp2hxwh/javascript-post-request-example
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:8088/post",
+                            // data: JSON.stringify(dict_values),  // `{"Id": 78912, "Customer": "Jason Sweet"}`,
+                            data: out_data,  // `{"Id": 78912, "Customer": "Jason Sweet"}`,
+                            dataType: "json",
+                            success: function (result) {
+                                console.log("Post result %s",result);
+                            },
+                            error: function (result, status) {
+                                console.log("ERROR in ajax send %s", status);
+                            }
+                        });
+                    } else {
+                        // https://www.w3schools.com/jquery/ajax_post.asp
+                        // https://code.tutsplus.com/articles/create-a-javascript-ajax-post-request-with-and-without-jquery--cms-39195
+                        // $(selector).post(URL,data,function(data,status,xhr),dataType)
+                        // var s_url = "http://localhost:8088/post";
+                        var s_url = "http://127.0.0.1:8088/post";
+                        $.post(s_url, out_data,
+                        function(data, status, xhr) {
+                            if(status === "success") {
+                                console.log("Post successfully created!")
+                            } else {
+                                console.log("Some error %s", status);
+                            }
+                        }//,
+                        // "text"  
+                        //"json"
+                        );
+                        $.post(s_url, out_data,
+                        function(data, status, xhr) {
+                            if(status === "success") {
+                                console.log("Post successfully created!")
+                            } else {
+                                console.log("Some error %s", status);
+                            }
+                        });
+
+                    }
+                    console.log("After ajax");
                 });
             });
             function addKeyHint(element) {
